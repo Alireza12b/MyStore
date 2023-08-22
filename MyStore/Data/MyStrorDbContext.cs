@@ -12,13 +12,12 @@ namespace MyStore.Data
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			//base.OnModelCreating(modelBuilder);
-			modelBuilder.Entity<Product>().HasKey(x => x.ProductId);
-			modelBuilder.Entity<Product>(entity =>
-			{
-				entity.HasOne<Category>()
+
+			//modelBuilder.Entity<Product>().HasKey(x => x.ProductId);
+			modelBuilder.Entity<Product>()
+				.HasOne<Category>(s => s.Category)
 				.WithMany(x => x.Products)
-				.HasForeignKey(x => x.ProductId);
-			});
+				.HasForeignKey(g => g.CategoryId);
 		}
 
 		public DbSet<Product> Products { get; set; }
