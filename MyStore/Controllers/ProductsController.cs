@@ -30,9 +30,18 @@ namespace MyStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product category)
+        public IActionResult Create(AddViewModel productVm)
         {
-            productRepository.AddProduct(category);
+            productVm.Category = categoryRepository.GetAllCategories().FirstOrDefault(x => x.CategoryId == productVm.CategoryId);
+            var product = new Product()
+            {
+                Name = productVm.Name,
+                Price = productVm.Price,
+                ManufactureDate = productVm.ManufactureDate,
+                Category = productVm.Category,
+                CategoryId = productVm.Category.CategoryId
+            };
+            productRepository.AddProduct(product);
             return RedirectToAction("Index");
         }
     }

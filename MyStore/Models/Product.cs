@@ -18,5 +18,6 @@
         public string ManufactureDate { get; set; }
         public  IEnumerable<Category> categories { get; set; }
         public Category Category { get; set; }
+        public int CategoryId { get; set; }
     }
 }
