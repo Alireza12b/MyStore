@@ -1,12 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyStore.Data;
 using MyStore.Models;
+using MyStore.Repositories.Interfaces;
 using System.Data;
 
 namespace MyStore.Repositories.Services
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly MyStrorDbContext myStrorDbContext;
         private readonly IConfiguration _iConfiguration;
@@ -19,38 +22,41 @@ namespace MyStore.Repositories.Services
             this.myStrorDbContext = myStrorDbContext;
         }
 
-        public IDbConnection CreateConnection() => new SqlConnection(_connString);
+        private IDbConnection CreateConnection() => new SqlConnection(_connString);
 
         private void Save()
         {
             myStrorDbContext.SaveChanges();
         }
 
-        public IEnumerable<Category> GetAllCategories()
+        public IEnumerable<Product> GetAllProducts()
         {
-            return myStrorDbContext.Categories.ToList();
+            var query = "select * from products";
+            var connection = CreateConnection();
+            var result = connection.Query<Product>(query);
+            return result.ToList();
         }
 
-        public Category GetCategoryById(int id)
+        public Product GetProductById(int id)
         {
-            return myStrorDbContext.Categories.ToList().Find(x => x.CategoryId == id);
+            return myStrorDbContext.Products.ToList().Find(x => x.Id == id);
         }
 
-        public void AddCategory(Category category)
+        public void AddProduct(Product category)
         {
-            myStrorDbContext.Categories.Add(category);
+            myStrorDbContext.Products.Add(category);
             Save();
         }
 
-        public void DeleteCategory(int id)
+        public void DeleteProduct(int id)
         {
-            myStrorDbContext.Categories.Remove(GetCategoryById(id));
+            myStrorDbContext.Products.Remove(GetProductById(id));
             Save();
         }
 
-        public void UpdateCategory(Category category)
+        public void UpdateProduct(Product category)
         {
-            myStrorDbContext.Categories.Update(category);
+            myStrorDbContext.Products.Update(category);
             Save();
         }
 
