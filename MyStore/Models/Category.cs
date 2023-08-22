@@ -7,8 +7,6 @@ namespace MyStore.Models
 		public int CategoryId { get; set; }
 		public string Name { get; set; }
 
-		[ForeignKey("ProductId")]
-		public int ProductId { get; set; }
 		public virtual ICollection<Product> Products { get; set; }
 	}
 }
