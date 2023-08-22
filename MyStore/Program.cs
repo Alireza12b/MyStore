@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyStore.Data;
+using MyStore.Repositories.Interfaces;
+using MyStore.Repositories.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<MyStrorDbContext>(options =>
 	options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 
@@ -27,6 +31,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
 	name: "default",
