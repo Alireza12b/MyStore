@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using MyStore.Data;
 using MyStore.Repositories.Interfaces;
 using MyStore.Repositories.Services;
+using Microsoft.AspNetCore.Identity;
+using MyStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<MyStrorDbContext>(options =>
 	options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<MyStoreUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<MyStrorDbContext>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -26,10 +31,13 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
+app.MapRazorPages();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 

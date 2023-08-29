@@ -1,4 +1,6 @@
-﻿namespace MyStore.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MyStore.Models
 {
 	public class Product
 	{
@@ -9,6 +11,9 @@
 
 		public int CategoryId { get; set; }
 		public Category Category { get; set; }
+
+		public string MyStoreUserId { get; set; }
+		public virtual MyStoreUser MyStoreUser { get; set; }
 	}
 
 	public class AddViewModel
